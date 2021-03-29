@@ -23,6 +23,8 @@ public class VelociraptorWindow extends JFrame {
 
     private FileChooserListener fileChooserListener;
 
+    private AboutMeListener aboutMeListener;
+
     private VelociraptorWindow() {
         createWindow();
     }
@@ -55,12 +57,11 @@ public class VelociraptorWindow extends JFrame {
             try {
                 myGraphics.fillRect(position.getX() + Constant.DRAW_OFFSET, position.getY() + Constant.DRAW_OFFSET, position.getWidth(), position.getHeight());
                 myGraphics.setColor(new Color(position.getColor()));
-                result.append("{")
-                        .append("x = ").append(position.getX())
-                        .append(", y = ").append(position.getY())
-                        .append(", width = ").append(position.getWidth())
-                        .append(", height = ").append(position.getHeight())
-                        .append(", color = ").append(position.getColor()).append("}, ");
+                result.append(position.getX())
+                        .append(",").append(position.getY())
+                        .append(",").append(position.getWidth())
+                        .append(",").append(position.getHeight())
+                        .append(",").append(position.getColor());
             } catch (Exception exception) {
                 exception.printStackTrace();
                 log.info("绘图过程中出现异常。");
@@ -69,7 +70,7 @@ public class VelociraptorWindow extends JFrame {
         });
         result.append("}");
         setClipBoard(result.toString());
-        JOptionPane.showMessageDialog(this, "已复制到剪切板，共计耗费" + positionList.size() + "个box。");
+        JOptionPane.showMessageDialog(this, "已复制到剪切板，共计耗费" + positionList.size() + "个box，字符长度：" + result.length());
     }
 
     private void createWindow() {
@@ -95,12 +96,12 @@ public class VelociraptorWindow extends JFrame {
         if (fileChooserListener == null) {
             fileChooserListener = new FileChooserListener(addPicture);
         }
+        if (aboutMeListener == null) {
+            aboutMeListener = new AboutMeListener();
+        }
         addPicture.addActionListener(fileChooserListener);
+        aboutMe.addActionListener(aboutMeListener);
         return jPanel;
-    }
-
-    public void doRepaint() {
-        repaint();
     }
 
     private void setClipBoard(String result) {

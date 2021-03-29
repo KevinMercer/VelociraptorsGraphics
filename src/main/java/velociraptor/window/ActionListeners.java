@@ -39,11 +39,11 @@ class FileChooserListener implements ActionListener {
             byte[] bytes = new byte[4];
             fileInputStream.read(bytes, 0, bytes.length);
             String fileInnerCode = bytesToHexString(bytes);
-            if (!Constant.JPG_CODE.equals(fileInnerCode) && !Constant.PNG_CODE.equals(fileInnerCode)) {
-                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "暂时只支持JPG和PNG格式的图片。");
+            if (!Constant.PNG_CODE.equals(fileInnerCode)) {
+                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "暂时只支持PNG格式的图片。");
                 return;
             }
-            VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(filePath)));
+            VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(filePath), 3));
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "啊哦，出现了未知异常，请重试！");
             exception.printStackTrace();
@@ -68,4 +68,12 @@ class FileChooserListener implements ActionListener {
         return builder.toString();
     }
 
+}
+
+class AboutMeListener implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.AUTHOR_S_WORD);
+    }
 }
