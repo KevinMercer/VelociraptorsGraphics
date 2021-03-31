@@ -70,7 +70,6 @@ public class VelociraptorWindow extends JFrame {
                         .append(",").append(position.getWidth())
                         .append(",").append(position.getHeight())
                         .append(",").append(position.getColor());
-//                myGraphics2d.scale(1.1, 1.1);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 log.info("绘图过程中出现异常。");
