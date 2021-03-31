@@ -6,11 +6,11 @@ import velociraptor.function.CollectPosition;
 import velociraptor.function.ReadPicture;
 
 import javax.swing.*;
-import java.awt.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
-import java.util.HashMap;
 
 /**
  * @author Velociraptor
@@ -22,28 +22,24 @@ public class ActionListeners {
 @Log
 class FileChooserListener implements ActionListener {
 
-    private String filePath;
-
-    public FileChooserListener(Component component) {
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         VelociraptorWindow.getInstance().repaint();
-        JFileChooser pictureChooser = new JFileChooser(filePath);
+        JFileChooser pictureChooser = new JFileChooser(VelociraptorWindow.getInstance().getImagePath());
         pictureChooser.setMultiSelectionEnabled(false);
         pictureChooser.showOpenDialog(VelociraptorWindow.getInstance());
-        filePath = pictureChooser.getSelectedFile().getPath();
+        VelociraptorWindow.getInstance().setImagePath(pictureChooser.getSelectedFile().getPath());
         try {
-            FileInputStream fileInputStream = new FileInputStream(filePath);
-            byte[] bytes = new byte[4];
-            fileInputStream.read(bytes, 0, bytes.length);
+            FileInputStream fileInputStream = new FileInputStream(VelociraptorWindow.getInstance().getImagePath());
+            byte[] bytes = new byte[Constant.FOUR];
+            fileInputStream.read(bytes, Constant.ZERO, bytes.length);
             String fileInnerCode = bytesToHexString(bytes);
             if (!Constant.PNG_CODE.equals(fileInnerCode)) {
                 JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "暂时只支持PNG格式的图片。");
                 return;
             }
-            VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(filePath), 3));
+            log.info(VelociraptorWindow.getInstance().getImagePath());
+            VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()));
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "啊哦，出现了未知异常，请重试！");
             exception.printStackTrace();
@@ -52,28 +48,46 @@ class FileChooserListener implements ActionListener {
         }
     }
 
-    private String bytesToHexString(byte[] src) {
-        StringBuilder builder = new StringBuilder();
-        if (src == null || src.length <= 0) {
+    private String bytesToHexString(byte[] byteArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (byteArray == null || byteArray.length <= Constant.ZERO) {
             return null;
         }
-        String hv;
-        for (byte aSrc : src) {
-            hv = Integer.toHexString(aSrc & 0xFF).toUpperCase();
-            if (hv.length() < 2) {
-                builder.append(0);
+        String hexValue;
+        for (byte b : byteArray) {
+            hexValue = Integer.toHexString(b & Constant._0XFF).toUpperCase();
+            if (hexValue.length() < Constant.TWO) {
+                stringBuilder.append(Constant.ZERO);
             }
-            builder.append(hv);
+            stringBuilder.append(hexValue);
         }
-        return builder.toString();
+        return stringBuilder.toString();
     }
 
 }
 
+@Log
 class AboutMeListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.AUTHOR_S_WORD);
+    }
+}
+
+@Log
+class SliderListener implements ChangeListener {
+
+    private JSlider jSlider;
+
+    public SliderListener(JSlider jSlider) {
+        this.jSlider = jSlider;
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        VelociraptorWindow.getInstance().setPixel(jSlider.getValue());
+        VelociraptorWindow.getInstance().setPositionList(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()));
+        VelociraptorWindow.getInstance().repaint();
     }
 }

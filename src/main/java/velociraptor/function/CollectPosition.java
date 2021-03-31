@@ -1,6 +1,7 @@
 package velociraptor.function;
 
 import lombok.extern.java.Log;
+import velociraptor.constant.Constant;
 import velociraptor.window.VelociraptorWindow;
 
 import javax.swing.*;
@@ -17,13 +18,13 @@ public class CollectPosition {
     private static List<Position> positionList = new ArrayList<>();
 
     public static List<Position> getFidelityPositionList(int[][] bitmap, int pixel) {
-        if (bitmap == null || pixel <= 0) {
+        if (bitmap == null || pixel <= Constant.ZERO) {
             JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "位图字节流传输过程中发生异常，导致字节流为空，请重试。");
             return null;
         }
         List<Position> fidelityPositionList = new ArrayList<>();
-        for (int x = 0; x < bitmap.length; x++) {
-            for (int y = 0; y < bitmap[x].length; y++) {
+        for (int x = Integer.valueOf(Constant.ZERO); x < bitmap.length; x++) {
+            for (int y = Integer.valueOf(Constant.ZERO); y < bitmap[x].length; y++) {
                 Position position = new Position();
                 position.setX(x);
                 position.setY(y);
@@ -36,7 +37,7 @@ public class CollectPosition {
     }
 
     public static List<Position> getPositionList(int[][] bitmap, int pixel) {
-        if (bitmap == null || pixel <= 0) {
+        if (bitmap == null || pixel <= Constant.ZERO) {
             JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "位图字节流传输过程中发生异常，导致字节流为空，请重试。");
             return null;
         }
@@ -52,11 +53,11 @@ public class CollectPosition {
     }
 
     private static void mergePosition(List<Position> mergedModel) {
-        if (mergedModel != null && mergedModel.size() > 0) {
-            Position position = mergedModel.get(0);
+        if (mergedModel != null && mergedModel.size() > Constant.ZERO) {
+            Position position = mergedModel.get(Constant.ZERO);
             List<Position> obsoleteModel = new ArrayList<>();
             obsoleteModel.add(position);
-            for (int i = 1; i < mergedModel.size(); i++) {
+            for (int i = Integer.valueOf(Constant.ONE); i < mergedModel.size(); i++) {
                 Position pool = mergedModel.get(i);
                 if (position.getColor() == pool.getColor()) {
                     if (position.getX() == pool.getX()) {
@@ -93,10 +94,10 @@ public class CollectPosition {
     private static List<Position> verticalMode(int[][] bitmap, int pixel) {
         List<Position> verticalModel = new ArrayList<>();
         Position lastVerticalPosition = null;
-        int lastVerticalColorInt = 0;
-        for (int x = 0; x < bitmap.length; x++) {
-            for (int y = 0; y < bitmap[x].length; y++) {
-                int theColorInt = 0;
+        int lastVerticalColorInt = Integer.valueOf(Constant.ZERO);
+        for (int x = Integer.valueOf(Constant.ZERO); x < bitmap.length; x++) {
+            for (int y = Integer.valueOf(Constant.ZERO); y < bitmap[x].length; y++) {
+                int theColorInt = Integer.valueOf(Constant.ZERO);
                 try {
                     theColorInt = bitmap[x][y];
                 } catch (Exception exception) {
@@ -144,10 +145,10 @@ public class CollectPosition {
     private static List<Position> horizontalMode(int[][] bitmap, int pixel) {
         List<Position> horizontalModel = new ArrayList<>();
         Position lastHorizontalPosition = null;
-        int lastHorizontalColorInt = 0;
-        for (int y = 0; y < bitmap.length; y++) {
-            for (int x = 0; x < bitmap[y].length; x++) {
-                int theColorInt = 0;
+        int lastHorizontalColorInt = Integer.valueOf(Constant.ZERO);
+        for (int y = Integer.valueOf(Constant.ZERO); y < bitmap.length; y++) {
+            for (int x = Integer.valueOf(Constant.ZERO); x < bitmap[y].length; x++) {
+                int theColorInt = Integer.valueOf(Constant.ZERO);
                 try {
                     theColorInt = bitmap[x][y];
                 } catch (Exception exception) {

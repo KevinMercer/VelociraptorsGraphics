@@ -19,11 +19,19 @@ public class VelociraptorWindow extends JFrame {
 
     private static VelociraptorWindow velociraptorWindow;
 
-    private Graphics myGraphics;
+    private Graphics2D myGraphics2d;
 
     private FileChooserListener fileChooserListener;
 
     private AboutMeListener aboutMeListener;
+
+    private SliderListener sliderListener;
+
+    private Integer pixel;
+
+    private String imagePath;
+
+    private List<Position> positionList;
 
     private VelociraptorWindow() {
         createWindow();
@@ -45,23 +53,24 @@ public class VelociraptorWindow extends JFrame {
     }
 
     public void velocityPaint(List<Position> positionList) {
-        myGraphics = this.getGraphics();
+        myGraphics2d = (Graphics2D) this.getGraphics();
         if (positionList == null) {
             JOptionPane.showMessageDialog(this, "像素点坐标表是空的。");
             log.info("像素点坐标表是空的。");
             return;
         }
-        myGraphics.clearRect(Constant.ZERO, Constant.ZERO, Constant.ZERO, Constant.ZERO);
+        myGraphics2d.clearRect(Constant.ZERO, Constant.ZERO, Constant.VELOCIRAPTOR_WINDOW_WIDTH, Constant.VELOCIRAPTOR_WINDOW_HEIGHT);
         StringBuffer result = new StringBuffer("{");
         positionList.forEach(position -> {
             try {
-                myGraphics.fillRect(position.getX() + Constant.DRAW_OFFSET, position.getY() + Constant.DRAW_OFFSET, position.getWidth(), position.getHeight());
-                myGraphics.setColor(new Color(position.getColor()));
+                myGraphics2d.fillRect((position.getX() + (Constant.DRAW_OFFSET - (pixel * Constant.OFFSET_RATE))), (position.getY() + (Constant.DRAW_OFFSET - (pixel * Constant.OFFSET_RATE))), position.getWidth(), position.getHeight());
+                myGraphics2d.setColor(new Color(position.getColor()));
                 result.append(position.getX())
                         .append(",").append(position.getY())
                         .append(",").append(position.getWidth())
                         .append(",").append(position.getHeight())
                         .append(",").append(position.getColor());
+//                myGraphics2d.scale(1.1, 1.1);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 log.info("绘图过程中出现异常。");
@@ -70,15 +79,17 @@ public class VelociraptorWindow extends JFrame {
         });
         result.append("}");
         setClipBoard(result.toString());
-        JOptionPane.showMessageDialog(this, "已复制到剪切板，共计耗费" + positionList.size() + "个box，字符长度：" + result.length());
+        JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "已复制到剪切板，共计耗费" + positionList.size() + "个box，字符长度：" + result.length());
     }
 
     private void createWindow() {
-        setBounds((int) ((ScreenUtil.getScreenSize().width - Constant.VELOCIRAPTOR_WINDOW_WIDTH) * 0.5), (int) ((ScreenUtil.getScreenSize().height - Constant.VELOCIRAPTOR_WINDOW_HEIGHT) * 0.5), Constant.VELOCIRAPTOR_WINDOW_WIDTH, Constant.VELOCIRAPTOR_WINDOW_HEIGHT);
+        setLayout(new BorderLayout());
+        setBounds((int) ((ScreenUtil.getScreenSize().width - Constant.VELOCIRAPTOR_WINDOW_WIDTH) * Constant.HALF_RATE), (int) ((ScreenUtil.getScreenSize().height - Constant.VELOCIRAPTOR_WINDOW_HEIGHT) * Constant.HALF_RATE), Constant.VELOCIRAPTOR_WINDOW_WIDTH, Constant.VELOCIRAPTOR_WINDOW_HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Velociraptor的像素图片转换器V1.0");
         setResizable(false);
         add(createPanel());
+        add(createSlider(), BorderLayout.SOUTH);
     }
 
     private JPanel createPanel() {
@@ -94,7 +105,7 @@ public class VelociraptorWindow extends JFrame {
         jMenuBar.add(jMenu);
         setJMenuBar(jMenuBar);
         if (fileChooserListener == null) {
-            fileChooserListener = new FileChooserListener(addPicture);
+            fileChooserListener = new FileChooserListener();
         }
         if (aboutMeListener == null) {
             aboutMeListener = new AboutMeListener();
@@ -104,14 +115,62 @@ public class VelociraptorWindow extends JFrame {
         return jPanel;
     }
 
+    private JTextArea createTextArea() {
+        return null;
+    }
+
+    private JSlider createSlider() {
+        JSlider jSlider = new JSlider();
+        jSlider.setMaximum(Constant.SLIDER_MAX_VALUE);
+        jSlider.setMinimum(Constant.ONE);
+        jSlider.setMajorTickSpacing(Constant.ONE);
+        jSlider.setPaintTicks(true);
+        jSlider.setPaintTrack(true);
+        jSlider.setPaintLabels(true);
+        jSlider.setValue(Integer.valueOf(Constant.ZERO));
+        if (sliderListener == null) {
+            sliderListener = new SliderListener(jSlider);
+        }
+        jSlider.addChangeListener(sliderListener);
+        return jSlider;
+    }
+
     private void setClipBoard(String result) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(new StringSelection(result), null);
     }
 
+    @Override
+    public void repaint() {
+        velocityPaint(positionList);
+    }
+
+    public void setPixel(Integer pixel) {
+        this.pixel = pixel;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public void setPositionList(List<Position> positionList) {
+        this.positionList = positionList;
+    }
+
+    public Integer getPixel() {
+        if (pixel == null) {
+            pixel = Integer.valueOf(Constant.ONE);
+        }
+        return pixel;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
     private static class VelociraptorWindowCount {
 
-        private static int velociraptorWindowCount = 0;
+        private static int velociraptorWindowCount = Integer.valueOf(Constant.ZERO);
 
     }
 

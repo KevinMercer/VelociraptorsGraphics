@@ -5,13 +5,41 @@ package velociraptor.constant;
  */
 public interface Constant {
 
-    public static final int ZERO = 0;
+    public static final Integer ZERO = 0;
 
-    public static final int VELOCIRAPTOR_WINDOW_WIDTH = 500;
+    public static final Integer ONE = 1;
 
-    public static final int VELOCIRAPTOR_WINDOW_HEIGHT = 500;
+    public static final Integer TWO = 2;
 
-    public static final int DRAW_OFFSET = 100;
+    public static final Integer THREE = 3;
+
+    public static final Integer FOUR = 4;
+
+    public static final Integer FIVE = 5;
+
+    public static final Integer SIX = 6;
+
+    public static final Integer SEVEN = 7;
+
+    public static final Integer EIGHT = 8;
+
+    public static final Integer NINE = 9;
+
+    public static final Integer _0XFF = 0xFF;
+
+    public static final Integer SLIDER_MAX_VALUE = 6;
+
+    public static final Integer VELOCIRAPTOR_WINDOW_WIDTH = 500;
+
+    public static final Integer VELOCIRAPTOR_WINDOW_HEIGHT = 500;
+
+    public static final Integer DRAW_OFFSET = 200;
+
+    public static final Integer OFFSET_RATE = 25;
+
+    public static final Double HALF_RATE = 0.5;
+
+    public static final String EMPTY_BUT_NOT_NULL_STRING = "";
 
     public static final String JPG_CODE = "FFD8FF";
 
