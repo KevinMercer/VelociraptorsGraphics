@@ -8,8 +8,10 @@ import velociraptor.function.ReadPicture;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.MouseInputListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
 
 /**
@@ -39,7 +41,7 @@ class FileChooserListener implements ActionListener {
                 return;
             }
             log.info(VelociraptorWindow.getInstance().getImagePath());
-            VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()));
+            VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()), Constant.TRUE);
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "啊哦，出现了未知异常，请重试！");
             exception.printStackTrace();
@@ -87,7 +89,48 @@ class SliderListener implements ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         VelociraptorWindow.getInstance().setPixel(jSlider.getValue());
-        VelociraptorWindow.getInstance().setPositionList(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()));
-        VelociraptorWindow.getInstance().repaint();
+
+    }
+}
+
+@Log
+class SliderMouseListener implements MouseInputListener {
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (VelociraptorWindow.getInstance().getImagePath() != null) {
+            VelociraptorWindow.getInstance().setPositionList(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()));
+            VelociraptorWindow.getInstance().repaint();
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
     }
 }

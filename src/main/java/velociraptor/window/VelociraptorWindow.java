@@ -27,6 +27,8 @@ public class VelociraptorWindow extends JFrame {
 
     private SliderListener sliderListener;
 
+    private SliderMouseListener sliderMouseListener;
+
     private Integer pixel;
 
     private String imagePath;
@@ -52,19 +54,22 @@ public class VelociraptorWindow extends JFrame {
         return velociraptorWindow;
     }
 
-    public void velocityPaint(List<Position> positionList) {
+    public void velocityPaint(List<Position> positionList, Boolean showMessageDialog) {
         myGraphics2d = (Graphics2D) this.getGraphics();
         if (positionList == null) {
-            JOptionPane.showMessageDialog(this, "像素点坐标表是空的。");
-            log.info("像素点坐标表是空的。");
+            if (imagePath != null) {
+                JOptionPane.showMessageDialog(this, "像素点坐标表是空的。");
+                log.info("像素点坐标表是空的。");
+            }
             return;
         }
         myGraphics2d.clearRect(Constant.ZERO, Constant.ZERO, Constant.VELOCIRAPTOR_WINDOW_WIDTH, Constant.VELOCIRAPTOR_WINDOW_HEIGHT);
         StringBuffer result = new StringBuffer("{");
         positionList.forEach(position -> {
             try {
+                Color color = new Color(position.getColor());
+                myGraphics2d.setColor(color);
                 myGraphics2d.fillRect((position.getX() + (Constant.DRAW_OFFSET - (pixel * Constant.OFFSET_RATE))), (position.getY() + (Constant.DRAW_OFFSET - (pixel * Constant.OFFSET_RATE))), position.getWidth(), position.getHeight());
-                myGraphics2d.setColor(new Color(position.getColor()));
                 result.append(position.getX())
                         .append(",").append(position.getY())
                         .append(",").append(position.getWidth())
@@ -78,7 +83,9 @@ public class VelociraptorWindow extends JFrame {
         });
         result.append("}");
         setClipBoard(result.toString());
-        JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "已复制到剪切板，共计耗费" + positionList.size() + "个box，字符长度：" + result.length());
+        if (showMessageDialog) {
+            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "已复制到剪切板，共计耗费" + positionList.size() + "个box，字符长度：" + result.length());
+        }
     }
 
     private void createWindow() {
@@ -114,10 +121,6 @@ public class VelociraptorWindow extends JFrame {
         return jPanel;
     }
 
-    private JTextArea createTextArea() {
-        return null;
-    }
-
     private JSlider createSlider() {
         JSlider jSlider = new JSlider();
         jSlider.setMaximum(Constant.SLIDER_MAX_VALUE);
@@ -130,7 +133,12 @@ public class VelociraptorWindow extends JFrame {
         if (sliderListener == null) {
             sliderListener = new SliderListener(jSlider);
         }
+        if (sliderMouseListener == null) {
+            sliderMouseListener = new SliderMouseListener();
+        }
         jSlider.addChangeListener(sliderListener);
+        jSlider.addMouseListener(sliderMouseListener);
+        jSlider.addMouseMotionListener(sliderMouseListener);
         return jSlider;
     }
 
@@ -141,7 +149,7 @@ public class VelociraptorWindow extends JFrame {
 
     @Override
     public void repaint() {
-        velocityPaint(positionList);
+        velocityPaint(positionList, Constant.TRUE);
     }
 
     public void setPixel(Integer pixel) {
