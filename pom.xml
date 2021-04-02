@@ -21,7 +21,7 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <build>
-        <finalName>Velociraptor'sGraphics 1.0.alpha</finalName>
+        <finalName>Velociraptor'sGraphics 1.0.beta</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
