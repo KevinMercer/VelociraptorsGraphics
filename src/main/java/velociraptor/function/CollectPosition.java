@@ -15,11 +15,13 @@ import java.util.List;
 @Log
 public class CollectPosition {
 
-    private static List<Position> positionList = new ArrayList<>();
+    private static List<Position> compareListAlpha = new ArrayList<>();
+
+    private static List<Position> compareListBeta = new ArrayList<>();
 
     public static List<Position> getFidelityPositionList(int[][] bitmap, int pixel) {
         if (bitmap == null || pixel <= Constant.ZERO) {
-            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "位图字节流传输过程中发生异常，导致字节流为空，请重试。");
+            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.STREAM_TRANSFER_ERROR);
             return null;
         }
         List<Position> fidelityPositionList = new ArrayList<>();
@@ -41,18 +43,19 @@ public class CollectPosition {
             JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "位图字节流传输过程中发生异常，导致字节流为空，请重试。");
             return null;
         }
-        List<Position> verticalModel = verticalMode(bitmap, pixel);
         List<Position> horizontalModel = horizontalMode(bitmap, pixel);
-        List<Position> mergedModel = verticalModel;
-        if (verticalModel.size() > horizontalModel.size()) {
-            mergedModel = horizontalModel;
+        List<Position> verticalModel = verticalMode(bitmap, pixel);
+        compareListAlpha.clear();
+        compareListBeta.clear();
+        mergePosition(horizontalModel, Constant.TRUE);
+        mergePosition(verticalModel, Constant.FALSE);
+        if (compareListAlpha.size() >= compareListBeta.size()) {
+            return compareListBeta;
         }
-        positionList.clear();
-        mergePosition(mergedModel);
-        return positionList;
+        return compareListAlpha;
     }
 
-    private static void mergePosition(List<Position> mergedModel) {
+    private static void mergePosition(List<Position> mergedModel, boolean isHorizontalModel) {
         if (mergedModel != null && mergedModel.size() > Constant.ZERO) {
             Position position = mergedModel.get(Constant.ZERO);
             List<Position> obsoleteModel = new ArrayList<>();
@@ -85,9 +88,13 @@ public class CollectPosition {
                     }
                 }
             }
-            positionList.add(position);
+            if (isHorizontalModel) {
+                compareListAlpha.add(position);
+            } else {
+                compareListBeta.add(position);
+            }
             mergedModel.removeAll(obsoleteModel);
-            mergePosition(mergedModel);
+            mergePosition(mergedModel, isHorizontalModel);
         }
     }
 
@@ -104,7 +111,7 @@ public class CollectPosition {
                     exception.printStackTrace();
                     log.info(exception.getStackTrace().toString());
                 }
-                boolean concat = false;
+                boolean concat;
                 Color color = new Color(theColorInt);
                 if (color.equals(Color.black)) {
                     lastVerticalColorInt = theColorInt;
@@ -112,9 +119,9 @@ public class CollectPosition {
                     continue;
                 }
                 if (lastVerticalColorInt == theColorInt) {
-                    concat = true;
+                    concat = Constant.TRUE;
                 } else {
-                    concat = false;
+                    concat = Constant.FALSE;
                 }
                 if (lastVerticalPosition == null) {
                     lastVerticalPosition = new Position();
@@ -155,7 +162,7 @@ public class CollectPosition {
                     exception.printStackTrace();
                     log.info(exception.getStackTrace().toString());
                 }
-                boolean concat = false;
+                boolean concat;
                 Color color = new Color(theColorInt);
                 if (color.equals(Color.black)) {
                     lastHorizontalColorInt = theColorInt;
@@ -163,9 +170,9 @@ public class CollectPosition {
                     continue;
                 }
                 if (lastHorizontalColorInt == theColorInt) {
-                    concat = true;
+                    concat = Constant.TRUE;
                 } else {
-                    concat = false;
+                    concat = Constant.FALSE;
                 }
                 if (lastHorizontalPosition == null) {
                     lastHorizontalPosition = new Position();

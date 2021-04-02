@@ -21,30 +21,7 @@ import java.io.IOException;
 @Log
 public class ReadPicture {
 
-    private static ReadPicture readPicture;
-
     private ReadPicture() {
-    }
-
-    public static ReadPicture getInstance() {
-        if (readPicture == null) {
-            synchronized (ReadPicture.class) {
-                if (readPicture == null) {
-                    if (ReadPictureCount.readPictureCount > Constant.ZERO) {
-                        throw new RuntimeException("Only one picture reader constructed is allowed！");
-                    }
-                    readPicture = new ReadPicture();
-                    ReadPictureCount.readPictureCount++;
-                }
-            }
-        }
-        return readPicture;
-    }
-
-    private static class ReadPictureCount {
-
-        private static int readPictureCount = Integer.valueOf(Constant.ZERO);
-
     }
 
     public static int[][] imageToBmp(String filePath) {
@@ -68,7 +45,7 @@ public class ReadPicture {
             }
             return bitmapArray;
         } catch (IOException ioException) {
-            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "对图片进行流转换时出现异常，请更换图源。");
+            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.TRANSLATE_IMAGE_TO_STREAM_ERROR);
             ioException.printStackTrace();
             return null;
         }

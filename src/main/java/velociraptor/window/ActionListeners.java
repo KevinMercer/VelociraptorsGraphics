@@ -26,9 +26,8 @@ class FileChooserListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        VelociraptorWindow.getInstance().repaint();
         JFileChooser pictureChooser = new JFileChooser(VelociraptorWindow.getInstance().getImagePath());
-        pictureChooser.setMultiSelectionEnabled(false);
+        pictureChooser.setMultiSelectionEnabled(Constant.FALSE);
         pictureChooser.showOpenDialog(VelociraptorWindow.getInstance());
         VelociraptorWindow.getInstance().setImagePath(pictureChooser.getSelectedFile().getPath());
         try {
@@ -37,14 +36,12 @@ class FileChooserListener implements ActionListener {
             fileInputStream.read(bytes, Constant.ZERO, bytes.length);
             String fileInnerCode = bytesToHexString(bytes);
             if (!Constant.PNG_CODE.equals(fileInnerCode)) {
-                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "暂时只支持PNG格式的图片。");
+                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.ONLY_PNG_SUPPORT);
                 return;
             }
-            log.info(VelociraptorWindow.getInstance().getImagePath());
             VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()), Constant.TRUE);
         } catch (Exception exception) {
-            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "啊哦，出现了未知异常，请重试！");
-            exception.printStackTrace();
+            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.UNKNOWN_ERROR);
             log.info(exception.getStackTrace().toString());
             return;
         }
@@ -56,8 +53,8 @@ class FileChooserListener implements ActionListener {
             return null;
         }
         String hexValue;
-        for (byte b : byteArray) {
-            hexValue = Integer.toHexString(b & Constant._0XFF).toUpperCase();
+        for (byte bite : byteArray) {
+            hexValue = Integer.toHexString(bite & Constant._0XFF).toUpperCase();
             if (hexValue.length() < Constant.TWO) {
                 stringBuilder.append(Constant.ZERO);
             }
@@ -89,7 +86,6 @@ class SliderListener implements ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         VelociraptorWindow.getInstance().setPixel(jSlider.getValue());
-
     }
 }
 
@@ -98,12 +94,10 @@ class SliderMouseListener implements MouseInputListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
 
     @Override
@@ -116,21 +110,17 @@ class SliderMouseListener implements MouseInputListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
     }
 }

@@ -1,5 +1,6 @@
 package velociraptor.launcher;
 
+import velociraptor.constant.Constant;
 import velociraptor.window.VelociraptorWindow;
 
 /**
@@ -8,6 +9,6 @@ import velociraptor.window.VelociraptorWindow;
 public class Launcher {
     public static void main(String[] args) {
         VelociraptorWindow velociraptorWindow = VelociraptorWindow.getInstance();
-        velociraptorWindow.setVisible(true);
+        velociraptorWindow.setVisible(Constant.TRUE);
     }
 }
