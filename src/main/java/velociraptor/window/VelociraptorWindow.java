@@ -73,7 +73,7 @@ public class VelociraptorWindow extends JFrame {
                         .append(Constant.COMMA).append(position.getY())
                         .append(Constant.COMMA).append(position.getWidth())
                         .append(Constant.COMMA).append(position.getHeight())
-                        .append(Constant.COMMA).append(position.getColor());
+                        .append(Constant.COMMA).append(position.getColor()).append(Constant.COMMA);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 log.info(Constant.DRAW_IMAGE_ERROR);
