@@ -16,7 +16,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author 18704
+ * @author Velociraptor
+ * @apiNote 读取图流
  */
 @Log
 public class ReadPicture implements Constant {

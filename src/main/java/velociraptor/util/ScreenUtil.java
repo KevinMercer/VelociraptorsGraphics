@@ -4,6 +4,7 @@ import java.awt.*;
 
 /**
  * @author Velociraptor
+ * @apiNote 屏幕工具
  */
 public class ScreenUtil {
 

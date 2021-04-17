@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * @author Velociraptor
+ * @apiNote 主窗口
  */
 @Log
 public class VelociraptorWindow extends JFrame implements Constant {

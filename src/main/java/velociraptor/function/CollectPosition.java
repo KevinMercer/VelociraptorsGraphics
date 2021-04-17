@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * @author Velociraptor
+ * @apiNote 收集像素坐标
  */
 @Log
 public class CollectPosition implements Constant {
