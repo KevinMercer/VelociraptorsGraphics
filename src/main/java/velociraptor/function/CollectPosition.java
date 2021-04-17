@@ -7,26 +7,27 @@ import velociraptor.window.VelociraptorWindow;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Velociraptor
  */
 @Log
-public class CollectPosition {
+public class CollectPosition implements Constant {
 
     private static List<Position> compareListAlpha = new ArrayList<>();
 
     private static List<Position> compareListBeta = new ArrayList<>();
 
     public static List<Position> getFidelityPositionList(int[][] bitmap, int pixel) {
-        if (bitmap == null || pixel <= Constant.ZERO) {
-            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.STREAM_TRANSFER_ERROR);
+        if (bitmap == null || pixel <= ZERO) {
+            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), STREAM_TRANSFER_ERROR);
             return null;
         }
         List<Position> fidelityPositionList = new ArrayList<>();
-        for (int x = Integer.valueOf(Constant.ZERO); x < bitmap.length; x++) {
-            for (int y = Integer.valueOf(Constant.ZERO); y < bitmap[x].length; y++) {
+        for (int x = ZERO; x < bitmap.length; x++) {
+            for (int y = ZERO; y < bitmap[x].length; y++) {
                 Position position = new Position();
                 position.setX(x);
                 position.setY(y);
@@ -39,7 +40,7 @@ public class CollectPosition {
     }
 
     public static List<Position> getPositionList(int[][] bitmap, int pixel) {
-        if (bitmap == null || pixel <= Constant.ZERO) {
+        if (bitmap == null || pixel <= ZERO) {
             JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), "位图字节流传输过程中发生异常，导致字节流为空，请重试。");
             return null;
         }
@@ -47,8 +48,8 @@ public class CollectPosition {
         List<Position> verticalModel = verticalMode(bitmap, pixel);
         compareListAlpha.clear();
         compareListBeta.clear();
-        mergePosition(horizontalModel, Constant.TRUE);
-        mergePosition(verticalModel, Constant.FALSE);
+        mergePosition(horizontalModel, TRUE);
+        mergePosition(verticalModel, FALSE);
         if (compareListAlpha.size() >= compareListBeta.size()) {
             return compareListBeta;
         }
@@ -56,11 +57,11 @@ public class CollectPosition {
     }
 
     private static void mergePosition(List<Position> mergedModel, boolean isHorizontalModel) {
-        if (mergedModel != null && mergedModel.size() > Constant.ZERO) {
-            Position position = mergedModel.get(Constant.ZERO);
+        if (mergedModel != null && mergedModel.size() > ZERO) {
+            Position position = mergedModel.get(ZERO);
             List<Position> obsoleteModel = new ArrayList<>();
             obsoleteModel.add(position);
-            for (int i = Integer.valueOf(Constant.ONE); i < mergedModel.size(); i++) {
+            for (int i = ONE; i < mergedModel.size(); i++) {
                 Position pool = mergedModel.get(i);
                 if (position.getColor() == pool.getColor()) {
                     if (position.getX() == pool.getX()) {
@@ -101,15 +102,15 @@ public class CollectPosition {
     private static List<Position> verticalMode(int[][] bitmap, int pixel) {
         List<Position> verticalModel = new ArrayList<>();
         Position lastVerticalPosition = null;
-        int lastVerticalColorInt = Integer.valueOf(Constant.ZERO);
-        for (int x = Integer.valueOf(Constant.ZERO); x < bitmap.length; x++) {
-            for (int y = Integer.valueOf(Constant.ZERO); y < bitmap[x].length; y++) {
-                int theColorInt = Integer.valueOf(Constant.ZERO);
+        int lastVerticalColorInt = ZERO;
+        for (int x = ZERO; x < bitmap.length; x++) {
+            for (int y = ZERO; y < bitmap[x].length; y++) {
+                int theColorInt = ZERO;
                 try {
                     theColorInt = bitmap[x][y];
                 } catch (Exception exception) {
                     exception.printStackTrace();
-                    log.info(exception.getStackTrace().toString());
+                    log.info(Arrays.toString(exception.getStackTrace()));
                 }
                 boolean concat;
                 Color color = new Color(theColorInt);
@@ -119,9 +120,9 @@ public class CollectPosition {
                     continue;
                 }
                 if (lastVerticalColorInt == theColorInt) {
-                    concat = Constant.TRUE;
+                    concat = TRUE;
                 } else {
-                    concat = Constant.FALSE;
+                    concat = FALSE;
                 }
                 if (lastVerticalPosition == null) {
                     lastVerticalPosition = new Position();
@@ -152,15 +153,15 @@ public class CollectPosition {
     private static List<Position> horizontalMode(int[][] bitmap, int pixel) {
         List<Position> horizontalModel = new ArrayList<>();
         Position lastHorizontalPosition = null;
-        int lastHorizontalColorInt = Integer.valueOf(Constant.ZERO);
-        for (int y = Integer.valueOf(Constant.ZERO); y < bitmap.length; y++) {
-            for (int x = Integer.valueOf(Constant.ZERO); x < bitmap[y].length; x++) {
-                int theColorInt = Integer.valueOf(Constant.ZERO);
+        int lastHorizontalColorInt = ZERO;
+        for (int y = ZERO; y < bitmap.length; y++) {
+            for (int x = ZERO; x < bitmap[y].length; x++) {
+                int theColorInt = ZERO;
                 try {
                     theColorInt = bitmap[x][y];
                 } catch (Exception exception) {
                     exception.printStackTrace();
-                    log.info(exception.getStackTrace().toString());
+                    log.info(Arrays.toString(exception.getStackTrace()));
                 }
                 boolean concat;
                 Color color = new Color(theColorInt);
@@ -170,9 +171,9 @@ public class CollectPosition {
                     continue;
                 }
                 if (lastHorizontalColorInt == theColorInt) {
-                    concat = Constant.TRUE;
+                    concat = TRUE;
                 } else {
-                    concat = Constant.FALSE;
+                    concat = FALSE;
                 }
                 if (lastHorizontalPosition == null) {
                     lastHorizontalPosition = new Position();

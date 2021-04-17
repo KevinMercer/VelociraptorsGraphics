@@ -19,7 +19,7 @@ import java.io.IOException;
  * @author 18704
  */
 @Log
-public class ReadPicture {
+public class ReadPicture implements Constant {
 
     private ReadPicture() {
     }
@@ -34,18 +34,18 @@ public class ReadPicture {
             bufferedImage = graphics2D.getDeviceConfiguration().createCompatibleImage(sourceWidth, sourceHeight, Transparency.TRANSLUCENT);
             graphics2D.dispose();
             graphics2D = bufferedImage.createGraphics();
-            graphics2D.drawImage(sourceImg, Constant.ZERO, Constant.ZERO, null);
+            graphics2D.drawImage(sourceImg, ZERO, ZERO, null);
             int width = bufferedImage.getWidth();
             int height = bufferedImage.getHeight();
             int[][] bitmapArray = new int[width][height];
-            for (int x = Integer.valueOf(Constant.ZERO); x < width; x++) {
-                for (int y = Integer.valueOf(Constant.ZERO); y < height; y++) {
+            for (int x = ZERO; x < width; x++) {
+                for (int y = ZERO; y < height; y++) {
                     bitmapArray[x][y] = bufferedImage.getRGB(x, y);
                 }
             }
             return bitmapArray;
         } catch (IOException ioException) {
-            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.TRANSLATE_IMAGE_TO_STREAM_ERROR);
+            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), TRANSLATE_IMAGE_TO_STREAM_ERROR);
             ioException.printStackTrace();
             return null;
         }

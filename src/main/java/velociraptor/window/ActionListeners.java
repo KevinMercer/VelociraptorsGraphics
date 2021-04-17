@@ -13,50 +13,50 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
+import java.util.Arrays;
 
 /**
  * @author Velociraptor
  */
 @Log
-public class ActionListeners {
+public class ActionListeners implements Constant {
 }
 
 @Log
-class FileChooserListener implements ActionListener {
+class FileChooserListener implements ActionListener, Constant {
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JFileChooser pictureChooser = new JFileChooser(VelociraptorWindow.getInstance().getImagePath());
-        pictureChooser.setMultiSelectionEnabled(Constant.FALSE);
+        pictureChooser.setMultiSelectionEnabled(FALSE);
         pictureChooser.showOpenDialog(VelociraptorWindow.getInstance());
         VelociraptorWindow.getInstance().setImagePath(pictureChooser.getSelectedFile().getPath());
         try {
             FileInputStream fileInputStream = new FileInputStream(VelociraptorWindow.getInstance().getImagePath());
-            byte[] bytes = new byte[Constant.FOUR];
-            fileInputStream.read(bytes, Constant.ZERO, bytes.length);
+            byte[] bytes = new byte[FOUR];
+            int readResult = fileInputStream.read(bytes, ZERO, bytes.length);
             String fileInnerCode = bytesToHexString(bytes);
-            if (!Constant.PNG_CODE.equals(fileInnerCode)) {
-                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.ONLY_PNG_SUPPORT);
+            if (!PNG_CODE.equals(fileInnerCode)) {
+                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), ONLY_PNG_SUPPORT);
                 return;
             }
-            VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()), Constant.TRUE);
+            VelociraptorWindow.getInstance().velocityPaint(CollectPosition.getPositionList(ReadPicture.imageToBmp(VelociraptorWindow.getInstance().getImagePath()), VelociraptorWindow.getInstance().getPixel()), TRUE);
         } catch (Exception exception) {
-            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.UNKNOWN_ERROR);
-            log.info(exception.getStackTrace().toString());
-            return;
+            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), UNKNOWN_ERROR);
+            log.info(Arrays.toString(exception.getStackTrace()));
         }
     }
 
     private String bytesToHexString(byte[] byteArray) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (byteArray == null || byteArray.length <= Constant.ZERO) {
+        if (byteArray == null || byteArray.length <= ZERO) {
             return null;
         }
         String hexValue;
         for (byte bite : byteArray) {
-            hexValue = Integer.toHexString(bite & Constant._0XFF).toUpperCase();
-            if (hexValue.length() < Constant.TWO) {
-                stringBuilder.append(Constant.ZERO);
+            hexValue = Integer.toHexString(bite & _0XFF).toUpperCase();
+            if (hexValue.length() < TWO) {
+                stringBuilder.append(ZERO);
             }
             stringBuilder.append(hexValue);
         }
@@ -66,16 +66,16 @@ class FileChooserListener implements ActionListener {
 }
 
 @Log
-class AboutMeListener implements ActionListener {
+class AboutMeListener implements ActionListener, Constant {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.AUTHOR_S_WORD);
+        JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), AUTHOR_S_WORD);
     }
 }
 
 @Log
-class SliderListener implements ChangeListener {
+class SliderListener implements ChangeListener, Constant {
 
     private JSlider jSlider;
 
@@ -90,7 +90,7 @@ class SliderListener implements ChangeListener {
 }
 
 @Log
-class SliderMouseListener implements MouseInputListener {
+class SliderMouseListener implements MouseInputListener, Constant {
 
     @Override
     public void mouseClicked(MouseEvent e) {

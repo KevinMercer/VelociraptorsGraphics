@@ -9,13 +9,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Velociraptor
  */
 @Log
-public class VelociraptorWindow extends JFrame {
+public class VelociraptorWindow extends JFrame implements Constant {
 
     private static VelociraptorWindow velociraptorWindow;
 
@@ -43,8 +44,8 @@ public class VelociraptorWindow extends JFrame {
         if (velociraptorWindow == null) {
             synchronized (VelociraptorWindow.class) {
                 if (velociraptorWindow == null) {
-                    if (VelociraptorWindowCount.velociraptorWindowCount > Constant.ZERO) {
-                        throw new RuntimeException(Constant.ONLY_ONE_INSTANCE_OF_WINDOW);
+                    if (VelociraptorWindowCount.velociraptorWindowCount > ZERO) {
+                        throw new RuntimeException(ONLY_ONE_INSTANCE_OF_WINDOW);
                     }
                     velociraptorWindow = new VelociraptorWindow();
                     VelociraptorWindowCount.velociraptorWindowCount++;
@@ -58,43 +59,41 @@ public class VelociraptorWindow extends JFrame {
         myGraphics2d = (Graphics2D) this.getGraphics();
         if (positionList == null) {
             if (imagePath != null) {
-                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), Constant.EMPTY_PIXEL_LIST);
+                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), EMPTY_PIXEL_LIST);
             }
             return;
         }
-        myGraphics2d.clearRect(Constant.ZERO, Constant.ZERO, Constant.VELOCIRAPTOR_WINDOW_WIDTH, Constant.VELOCIRAPTOR_WINDOW_HEIGHT);
-        StringBuffer result = new StringBuffer(Constant.LEFT_BRACE);
+        myGraphics2d.clearRect(ZERO, ZERO, VELOCIRAPTOR_WINDOW_WIDTH, VELOCIRAPTOR_WINDOW_HEIGHT);
+        StringBuffer result = new StringBuffer(LEFT_BRACE);
         positionList.forEach(position -> {
             try {
                 Color color = new Color(position.getColor());
                 myGraphics2d.setColor(color);
-                myGraphics2d.fillRect((position.getX() + (Constant.DRAW_OFFSET - (pixel * Constant.OFFSET_RATE))), (position.getY() + (Constant.DRAW_OFFSET - (pixel * Constant.OFFSET_RATE))), position.getWidth(), position.getHeight());
+                myGraphics2d.fillRect((position.getX() + (DRAW_OFFSET - (pixel * OFFSET_RATE))), (position.getY() + (DRAW_OFFSET - (pixel * OFFSET_RATE))), position.getWidth(), position.getHeight());
                 result.append(position.getX())
-                        .append(Constant.COMMA).append(position.getY())
-                        .append(Constant.COMMA).append(position.getWidth())
-                        .append(Constant.COMMA).append(position.getHeight())
-                        .append(Constant.COMMA).append(position.getColor()).append(Constant.COMMA);
+                        .append(COMMA).append(position.getY())
+                        .append(COMMA).append(position.getWidth())
+                        .append(COMMA).append(position.getHeight())
+                        .append(COMMA).append(position.getColor()).append(COMMA);
             } catch (Exception exception) {
                 exception.printStackTrace();
-                log.info(Constant.DRAW_IMAGE_ERROR);
-                log.info(exception.getStackTrace().toString());
+                log.info(DRAW_IMAGE_ERROR);
+                log.info(Arrays.toString(exception.getStackTrace()));
             }
         });
-        result.append(Constant.RIGHT_BRACE);
+        result.append(RIGHT_BRACE);
         setClipBoard(result.toString());
         if (showMessageDialog) {
-            StringBuffer messageBuffer = new StringBuffer();
-            messageBuffer.append(Constant.COPY_READY).append(positionList.size()).append(Constant.COPY_DESC).append(result.length());
-            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), messageBuffer.toString());
+            JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), COPY_READY + positionList.size() + COPY_DESC + result.length());
         }
     }
 
     private void createWindow() {
         setLayout(new BorderLayout());
-        setBounds((int) ((ScreenUtil.getScreenSize().width - Constant.VELOCIRAPTOR_WINDOW_WIDTH) * Constant.HALF_RATE), (int) ((ScreenUtil.getScreenSize().height - Constant.VELOCIRAPTOR_WINDOW_HEIGHT) * Constant.HALF_RATE), Constant.VELOCIRAPTOR_WINDOW_WIDTH, Constant.VELOCIRAPTOR_WINDOW_HEIGHT);
+        setBounds((int) ((ScreenUtil.getScreenSize().width - VELOCIRAPTOR_WINDOW_WIDTH) * HALF_RATE), (int) ((ScreenUtil.getScreenSize().height - VELOCIRAPTOR_WINDOW_HEIGHT) * HALF_RATE), VELOCIRAPTOR_WINDOW_WIDTH, VELOCIRAPTOR_WINDOW_HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle(Constant.TITLE);
-        setResizable(Constant.FALSE);
+        setTitle(TITLE);
+        setResizable(FALSE);
         add(createPanel());
         add(createSlider(), BorderLayout.SOUTH);
     }
@@ -102,11 +101,11 @@ public class VelociraptorWindow extends JFrame {
     private JPanel createPanel() {
         JPanel mainPanel = new JPanel();
         JMenuBar mainMenuBar = new JMenuBar();
-        mainMenuBar.setVisible(Constant.TRUE);
-        mainMenuBar.setBorderPainted(Constant.TRUE);
-        JMenu mainMenu = new JMenu(Constant.OPTION);
-        JMenuItem selectImage = new JMenuItem(Constant.SELECT_IMAGE);
-        JMenuItem aboutMe = new JMenuItem(Constant.ABOUT_ME);
+        mainMenuBar.setVisible(TRUE);
+        mainMenuBar.setBorderPainted(TRUE);
+        JMenu mainMenu = new JMenu(OPTION);
+        JMenuItem selectImage = new JMenuItem(SELECT_IMAGE);
+        JMenuItem aboutMe = new JMenuItem(ABOUT_ME);
         mainMenu.add(selectImage);
         mainMenu.add(aboutMe);
         mainMenuBar.add(mainMenu);
@@ -124,13 +123,13 @@ public class VelociraptorWindow extends JFrame {
 
     private JSlider createSlider() {
         JSlider bottomSlider = new JSlider();
-        bottomSlider.setMaximum(Constant.SLIDER_MAX_VALUE);
-        bottomSlider.setMinimum(Constant.ONE);
-        bottomSlider.setMajorTickSpacing(Constant.ONE);
-        bottomSlider.setPaintTicks(Constant.TRUE);
-        bottomSlider.setPaintTrack(Constant.TRUE);
-        bottomSlider.setPaintLabels(Constant.TRUE);
-        bottomSlider.setValue(Integer.valueOf(Constant.ZERO));
+        bottomSlider.setMaximum(SLIDER_MAX_VALUE);
+        bottomSlider.setMinimum(ONE);
+        bottomSlider.setMajorTickSpacing(ONE);
+        bottomSlider.setPaintTicks(TRUE);
+        bottomSlider.setPaintTrack(TRUE);
+        bottomSlider.setPaintLabels(TRUE);
+        bottomSlider.setValue(ZERO);
         if (sliderListener == null) {
             sliderListener = new SliderListener(bottomSlider);
         }
@@ -150,7 +149,7 @@ public class VelociraptorWindow extends JFrame {
 
     @Override
     public void repaint() {
-        velocityPaint(positionList, Constant.TRUE);
+        velocityPaint(positionList, TRUE);
     }
 
     public void setPixel(Integer pixel) {
@@ -167,7 +166,7 @@ public class VelociraptorWindow extends JFrame {
 
     public Integer getPixel() {
         if (pixel == null) {
-            pixel = Integer.valueOf(Constant.ONE);
+            pixel = ONE;
         }
         return pixel;
     }
@@ -176,8 +175,8 @@ public class VelociraptorWindow extends JFrame {
         return imagePath;
     }
 
-    private static class VelociraptorWindowCount {
-        private static int velociraptorWindowCount = Integer.valueOf(Constant.ZERO);
+    private static class VelociraptorWindowCount implements Constant {
+        private static int velociraptorWindowCount = ZERO;
     }
 
 }

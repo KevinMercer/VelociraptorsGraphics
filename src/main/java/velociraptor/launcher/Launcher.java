@@ -6,9 +6,9 @@ import velociraptor.window.VelociraptorWindow;
 /**
  * @author Velociraptor
  */
-public class Launcher {
+public class Launcher implements Constant {
     public static void main(String[] args) {
         VelociraptorWindow velociraptorWindow = VelociraptorWindow.getInstance();
-        velociraptorWindow.setVisible(Constant.TRUE);
+        velociraptorWindow.setVisible(TRUE);
     }
 }
