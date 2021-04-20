@@ -12,6 +12,7 @@ import javax.swing.event.MouseInputListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
 
@@ -33,6 +34,11 @@ class FileChooserListener implements ActionListener, Constant {
         pictureChooser.showOpenDialog(VelociraptorWindow.getInstance());
         VelociraptorWindow.getInstance().setImagePath(pictureChooser.getSelectedFile().getPath());
         try {
+            long fileSize = new File(VelociraptorWindow.getInstance().getImagePath()).length();
+            if (fileSize > MAX_FILE_SIZE) {
+                JOptionPane.showMessageDialog(VelociraptorWindow.getInstance(), MAX_102400);
+                return;
+            }
             FileInputStream fileInputStream = new FileInputStream(VelociraptorWindow.getInstance().getImagePath());
             byte[] bytes = new byte[FOUR];
             int readResult = fileInputStream.read(bytes, ZERO, bytes.length);

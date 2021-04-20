@@ -32,6 +32,8 @@ public interface Constant {
 
     Integer _0XFF = 0xFF;
 
+    Long MAX_FILE_SIZE = 102400L;
+
     Integer SLIDER_MAX_VALUE = 6;
 
     Integer VELOCIRAPTOR_WINDOW_WIDTH = 500;
@@ -81,6 +83,8 @@ public interface Constant {
     String TRANSLATE_IMAGE_TO_STREAM_ERROR = "对图片进行流转换时出现异常，请更换图源。";
 
     String ONLY_PNG_SUPPORT = "暂时只支持PNG格式的图片。";
+
+    String MAX_102400 = "最大支持100KB的文件。";
 
     String UNKNOWN_ERROR = "啊哦，出现了未知异常，请重试！";
 
